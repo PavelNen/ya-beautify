@@ -8,11 +8,18 @@
 
   /* Force-hide via inline style (survives any CSS specificity war) */
   var HIDE = [
+    /* old DOM */
     '.theader__personal-item_favs',
     '.theader__personal-item_mail',
-    '.plus-link',
+    '.theader__personal-left > div:first-child',
     '.content__bottom',
     '.reasoning-section',
+    /* new DOM */
+    '.headline__personal-item_favs',
+    '.headline__personal-item_mail',
+    '.plus-link',
+    '.body__content_feed_yes',
+    '.body__feed-wrapper',
   ];
 
   function hide(el) {
@@ -25,25 +32,38 @@
     });
   }
 
+  /* ── Theme detection: read actual body background ────────── */
+
+  function isDarkTheme() {
+    var bg = getComputedStyle(document.body).backgroundColor;
+    var rgb = bg.match(/\d+/g);
+    if (!rgb || rgb.length < 3) return false;
+    var lum = parseInt(rgb[0]) * 0.299 + parseInt(rgb[1]) * 0.587 + parseInt(rgb[2]) * 0.114;
+    return lum < 128;
+  }
+
   /* ── Informers: move to body root + pin to bottom ─────────── */
 
   function moveInformers() {
-    var informers = document.querySelector('div.informers');
+    var informers = document.querySelector('div.informers, aside.informers3');
     if (!informers) return;
 
     if (informers.parentElement !== document.body) {
       document.body.appendChild(informers);
     }
 
-    informers.style.setProperty('position', 'fixed',   'important');
-    informers.style.setProperty('bottom',   '0',        'important');
-    informers.style.setProperty('left',     '0',        'important');
-    informers.style.setProperty('right',    '0',        'important');
-    informers.style.setProperty('z-index',  '9999',     'important');
-    informers.style.setProperty('background', '#f8f9fa','important');
-    informers.style.setProperty('border-top','1px solid #e4e4e4','important');
-    informers.style.setProperty('padding',  '0 24px',  'important');
-    informers.style.setProperty('box-sizing','border-box','important');
+    var dark = isDarkTheme();
+    informers.style.setProperty('display',     'flex',       'important');
+    informers.style.setProperty('visibility',  'visible',    'important');
+    informers.style.setProperty('position',    'fixed',   'important');
+    informers.style.setProperty('bottom',      '0',       'important');
+    informers.style.setProperty('left',        '0',       'important');
+    informers.style.setProperty('right',       '0',       'important');
+    informers.style.setProperty('z-index',     '99999',   'important');
+    informers.style.setProperty('background',  dark ? '#1c1c1c' : '#f8f9fa', 'important');
+    informers.style.setProperty('border-top',  dark ? '1px solid rgba(255,255,255,.08)' : '1px solid rgba(0,0,0,.08)', 'important');
+    informers.style.setProperty('padding',     '0 24px',  'important');
+    informers.style.setProperty('box-sizing',  'border-box', 'important');
   }
 
   /* ── Logo ─────────────────────────────────────────────────── */
@@ -53,14 +73,23 @@
     var form = document.querySelector('form.mini-suggest');
     if (!form) return;
 
-    /* Hide Yandex's own standalone logo (div > img before the form) */
-    var el = form.previousElementSibling;
+    /* Hide blank spacer div immediately before the form */
+    var prev = form.previousElementSibling;
+    if (prev && prev.tagName === 'DIV' && !prev.id && !prev.className) {
+      hide(prev);
+    }
+
+    /* Hide Yandex's own standalone logo (div > img or div > svg) */
+    var el = prev ? prev.previousElementSibling : null;
     while (el) {
+      var cls = el.className || '';
       if (
-        el.tagName === 'DIV' &&
-        el.querySelector('img') &&
-        !el.className.includes('theader') &&
-        !el.className.includes('informers') &&
+        (el.tagName === 'DIV' || el.tagName === 'A') &&
+        (el.querySelector('img, svg') || el.textContent.trim().length < 40) &&
+        !cls.includes('theader') &&
+        !cls.includes('headline') &&
+        !cls.includes('informer') &&
+        !cls.includes('suggest') &&
         !el.id
       ) {
         hide(el);
@@ -72,9 +101,14 @@
     /* Inject our SVG logo */
     var logo = document.createElement('div');
     logo.id = 'yab-logo';
-    logo.innerHTML =
-      '<img src="' + chrome.runtime.getURL('logo.svg') + '"' +
-           ' alt="Яндекс" draggable="false">';
+    var img = document.createElement('img');
+    img.src = chrome.runtime.getURL('logo.svg');
+    img.alt = 'Яндекс';
+    img.draggable = false;
+    if (isDarkTheme()) {
+      img.style.filter = 'invert(1)';
+    }
+    logo.appendChild(img);
     form.parentElement.insertBefore(logo, form);
   }
 
