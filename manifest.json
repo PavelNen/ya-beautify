@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Ya Beautify",
+  "version": "1.0.0",
+  "description": "Минималистичный дизайн поиска Яндекса в стиле Google",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://ya.ru/*",
+        "*://www.ya.ru/*",
+        "*://yandex.ru/",
+        "*://www.yandex.ru/",
+        "*://yandex.ru/?*",
+        "*://www.yandex.ru/?*"
+      ],
+      "css": ["content.css"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://ya.ru/*",
+        "*://www.ya.ru/*",
+        "*://yandex.ru/",
+        "*://www.yandex.ru/",
+        "*://yandex.ru/?*",
+        "*://www.yandex.ru/?*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

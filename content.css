@@ -1,0 +1,283 @@
+/* ============================================================
+   Ya Beautify — content.css
+   Injected at document_start to prevent flash of original content.
+   JS (content.js) adds .yab-active to <body> and populates
+   #yab-container; until then, these early-hide rules suppress
+   the noisiest Yandex widgets.
+   ============================================================ */
+
+/* ── Early hides (before JS runs) ────────────────────────── */
+
+/* Services row (Alice, Квартиры, Товары …) */
+.services-suggest,
+[class*="services-suggest"],
+[class*="ServicesSuggest"] {
+  display: none !important;
+}
+
+/* Weather / currencies bar */
+.meteo,
+[class*="meteo"],
+.home-weather,
+[class*="home-weather"],
+[class*="Weather"] {
+  display: none !important;
+}
+
+/* News / content feed */
+#feed,
+.home-stories,
+[class*="home-stories"],
+[class*="HomeStories"] {
+  display: none !important;
+}
+
+
+/* ── Body reset (applied once .yab-active is set) ─────────── */
+
+body.yab-active {
+  background: #fff !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+}
+
+/* Hide every original body child except our container */
+body.yab-active > *:not(#yab-container) {
+  display: none !important;
+}
+
+
+/* ── Main wrapper ─────────────────────────────────────────── */
+
+#yab-container {
+  min-height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  font-family: arial, sans-serif;
+  color: #202124;
+}
+
+
+/* ── Top header ───────────────────────────────────────────── */
+
+#yab-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 24px;
+  background: #fff;
+  z-index: 200;
+}
+
+#yab-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.yab-header-link {
+  color: #202124;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.yab-header-link:hover {
+  text-decoration: underline;
+}
+
+#yab-services-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  text-decoration: none;
+  color: #5f6368;
+  transition: background 0.15s;
+}
+
+#yab-services-icon:hover {
+  background: #e8eaed;
+}
+
+#yab-avatar img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: block;
+  cursor: pointer;
+}
+
+
+/* ── Center content ───────────────────────────────────────── */
+
+#yab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Placed slightly above vertical center, like Google */
+  justify-content: center;
+  padding: 48px 20px 120px;
+}
+
+
+/* ── Logo ─────────────────────────────────────────────────── */
+
+#yab-logo {
+  margin-bottom: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#yab-logo a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Scale logo image similarly to how Google presents its logo */
+#yab-logo img,
+#yab-logo svg {
+  height: 92px !important;
+  width: auto !important;
+  max-width: 272px !important;
+}
+
+
+/* ── Search wrapper ───────────────────────────────────────── */
+
+#yab-search {
+  width: 100%;
+  max-width: 584px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Override Yandex's own width constraints on the form */
+#yab-search .search2,
+#yab-search [class*="search2"],
+#yab-search .mini-suggest,
+#yab-search form {
+  width: 100% !important;
+  max-width: 584px !important;
+}
+
+/* Google-style rounded input box */
+#yab-search .input,
+#yab-search [class*="input_theme"],
+#yab-search [class*="input__wrap"],
+#yab-search .search2__input,
+#yab-search [class*="search__input"] {
+  border: 1px solid #dfe1e5 !important;
+  border-radius: 24px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  transition: box-shadow 0.2s linear, border-color 0.2s linear !important;
+  overflow: visible !important;
+}
+
+#yab-search .input:hover,
+#yab-search [class*="input_theme"]:hover,
+#yab-search [class*="input__wrap"]:hover {
+  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28) !important;
+  border-color: rgba(223, 225, 229, 0) !important;
+}
+
+/* Text input itself */
+#yab-search input[type="text"],
+#yab-search input[name="text"],
+#yab-search .input__control {
+  font-size: 16px !important;
+  font-family: arial, sans-serif !important;
+  color: #202124 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Hide Yandex's own submit button — we supply our own */
+#yab-search .search2__button,
+#yab-search button[type="submit"]:not(.yab-btn) {
+  display: none !important;
+}
+
+
+/* ── Our two buttons ──────────────────────────────────────── */
+
+#yab-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.yab-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #f8f9fa;
+  border-radius: 4px;
+  color: #3c4043;
+  cursor: pointer;
+  font-family: arial, sans-serif;
+  font-size: 14px;
+  height: 36px;
+  min-width: 120px;
+  padding: 0 20px;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: 0;
+  font-weight: 400;
+  line-height: 34px;
+  transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.yab-btn:hover {
+  background-color: #f1f3f4;
+  border-color: #dadce0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.yab-btn:focus {
+  outline: none;
+  border-color: #4285f4;
+}
+
+
+/* ── Footer ───────────────────────────────────────────────── */
+
+#yab-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f2f2f2;
+  border-top: 1px solid #e4e4e4;
+  font-family: arial, sans-serif;
+  font-size: 13px;
+  color: #70757a;
+}
+
+#yab-footer a {
+  color: #70757a;
+  text-decoration: none;
+}
+
+#yab-footer a:hover {
+  text-decoration: underline;
+}
