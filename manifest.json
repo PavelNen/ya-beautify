@@ -3,11 +3,19 @@
   "name": "Ya Beautify",
   "version": "1.0.0",
   "description": "Минималистичный дизайн поиска Яндекса в стиле Google",
+  "icons": {
+    "16":  "icons/icon16.png",
+    "32":  "icons/icon32.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "content_scripts": [
     {
       "matches": [
-        "*://ya.ru/*",
-        "*://www.ya.ru/*",
+        "*://ya.ru/",
+        "*://www.ya.ru/",
+        "*://ya.ru/?*",
+        "*://www.ya.ru/?*",
         "*://yandex.ru/",
         "*://www.yandex.ru/",
         "*://yandex.ru/?*",
@@ -18,8 +26,10 @@
     },
     {
       "matches": [
-        "*://ya.ru/*",
-        "*://www.ya.ru/*",
+        "*://ya.ru/",
+        "*://www.ya.ru/",
+        "*://ya.ru/?*",
+        "*://www.ya.ru/?*",
         "*://yandex.ru/",
         "*://www.yandex.ru/",
         "*://yandex.ru/?*",
@@ -27,6 +37,12 @@
       ],
       "js": ["content.js"],
       "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["logo.svg"],
+      "matches": ["*://ya.ru/*", "*://www.ya.ru/*", "*://yandex.ru/*", "*://www.yandex.ru/*"]
     }
   ]
 }
