@@ -149,6 +149,12 @@ form.mini-suggest {
   width: auto;
   display: block;
   max-width: 100%;
+  /* Автоматически адаптируется к любому фону без детекции темы:
+     invert(1) делает чёрный SVG белым,
+     mix-blend-mode: difference превращает его обратно в чёрный на белом фоне
+     и оставляет белым на тёмном */
+  filter: invert(1);
+  mix-blend-mode: difference;
 }
 
 
@@ -198,19 +204,20 @@ aside.informers3 {
   bottom: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  z-index: 9999 !important;
-  background: #f8f9fa !important;
-  border-top: 1px solid rgba(0,0,0,.08) !important;
+  z-index: 99999 !important;
+  /* backdrop-filter — прозрачный фон, сквозь который виден фон страницы.
+     Работает с любой темой без JS-детекции. */
+  background: transparent !important;
+  backdrop-filter: blur(12px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.4) !important;
+  border-top: 1px solid rgba(128,128,128,.2) !important;
   padding: 0 24px !important;
   box-sizing: border-box !important;
 }
 
-/* Footer background + border-top set dynamically via JS (isDarkTheme) */
 
-
-/* ── Dark theme: logo inversion handled by JS (isDarkTheme) ── */
-
-/* Search icon adapts via CSS only as fallback */
-@media (prefers-color-scheme: dark) {
-  .search3__logo::after { filter: invert(1); }
+/* Search icon: same trick as logo */
+.search3__logo::after {
+  filter: invert(1) !important;
+  mix-blend-mode: difference !important;
 }

@@ -32,15 +32,7 @@
     });
   }
 
-  /* ── Theme detection: read actual body background ────────── */
-
-  function isDarkTheme() {
-    var bg = getComputedStyle(document.body).backgroundColor;
-    var rgb = bg.match(/\d+/g);
-    if (!rgb || rgb.length < 3) return false;
-    var lum = parseInt(rgb[0]) * 0.299 + parseInt(rgb[1]) * 0.587 + parseInt(rgb[2]) * 0.114;
-    return lum < 128;
-  }
+  /* Theme handled entirely via CSS (mix-blend-mode + backdrop-filter) */
 
   /* ── Informers: move to body root + pin to bottom ─────────── */
 
@@ -52,18 +44,9 @@
       document.body.appendChild(informers);
     }
 
-    var dark = isDarkTheme();
+    /* Position pinned via CSS; only visibility needs JS override */
     informers.style.setProperty('display',     'flex',       'important');
     informers.style.setProperty('visibility',  'visible',    'important');
-    informers.style.setProperty('position',    'fixed',   'important');
-    informers.style.setProperty('bottom',      '0',       'important');
-    informers.style.setProperty('left',        '0',       'important');
-    informers.style.setProperty('right',       '0',       'important');
-    informers.style.setProperty('z-index',     '99999',   'important');
-    informers.style.setProperty('background',  dark ? '#1c1c1c' : '#f8f9fa', 'important');
-    informers.style.setProperty('border-top',  dark ? '1px solid rgba(255,255,255,.08)' : '1px solid rgba(0,0,0,.08)', 'important');
-    informers.style.setProperty('padding',     '0 24px',  'important');
-    informers.style.setProperty('box-sizing',  'border-box', 'important');
   }
 
   /* ── Logo ─────────────────────────────────────────────────── */
@@ -105,9 +88,6 @@
     img.src = chrome.runtime.getURL('logo.svg');
     img.alt = 'Яндекс';
     img.draggable = false;
-    if (isDarkTheme()) {
-      img.style.filter = 'invert(1)';
-    }
     logo.appendChild(img);
     form.parentElement.insertBefore(logo, form);
   }
@@ -165,6 +145,7 @@
       observer.observe(document.body, { childList: true, subtree: true });
       setTimeout(function() { observer.disconnect(); }, 10000);
     }
+
   }
 
   if (document.readyState === 'loading') {
